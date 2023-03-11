@@ -44,7 +44,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             return null;
         }
 
-        var result = await _dbContext.Set<T>().FindAsync();
+        var result = await _dbContext.Set<T>().FindAsync(id);
         return result;
     }
 
