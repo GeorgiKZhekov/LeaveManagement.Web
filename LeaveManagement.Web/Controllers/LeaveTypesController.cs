@@ -11,6 +11,7 @@ using LeaveManagement.Web.Models;
 using LeaveManagement.Web.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using LeaveManagement.Web.Constants;
+using AutoMapper.Configuration.Conventions;
 
 namespace LeaveManagement.Web.Controllers
 {
@@ -128,5 +129,12 @@ namespace LeaveManagement.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateLeave(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

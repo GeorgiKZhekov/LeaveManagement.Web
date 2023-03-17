@@ -184,6 +184,7 @@ namespace LeaveManagement.Web.Migrations
                     NumberOfDays = table.Column<int>(type: "int", nullable: false),
                     LeaveTypeId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Period = table.Column<int>(type: "int", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -197,6 +198,34 @@ namespace LeaveManagement.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "FAE750D3-5866-42F9-A55F-E68349AF69F1", "464947a7-9ff4-4533-9739-17bf8812db38", "User", "USER" },
+                    { "FB04C3E1-2134-48FB-A187-44107D90ED38", "006f8e81-65ff-4592-b639-d58533f0bab0", "Administrator", "ADMINISTRATOR" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateJoined", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TaxId", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "5E8EBDC0-7AD3-41CC-A8C6-6CB1DB9FDB42", 0, "e5d7f902-01e7-45a0-b43c-a507b4936a46", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "jototheg@gmail.com", true, "Ioana", "Palova", false, null, "JOTOTHEG@GMAIL.COM", "JOTOTHEG@GMAIL.COM", "AQAAAAEAACcQAAAAEKnEpi2GwxRDh15Cnxfx+7T5EoQV2P1pqS/uFOvAIpFORAna0Ay/6Ox+2xrzPkgMZw==", null, false, "c80d0d7b-8c9b-4574-8e98-836f08befbfc", null, false, "jototheg@gmail.com" },
+                    { "b37900c7-8840-41a7-adc1-db1666502657", 0, "da85bebd-26bf-4f82-9cb7-1546440fd753", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "gtothejo@gmail.com", true, "Georgi", "Zhekov", false, null, "GTOTHEJO@GMAIL.COM", "GTOTHEJO@GMAIL.COM", "AQAAAAEAACcQAAAAEMy5/TDOMdgF5SJzqrP8mIlex2S+OY5G1kaE08JX5cpYxgM4c4QX+4YRGv3p4wrF2Q==", null, false, "bd74df55-bfc3-41bc-9706-ca163c5242d6", null, false, "gtothejo@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "FAE750D3-5866-42F9-A55F-E68349AF69F1", "5E8EBDC0-7AD3-41CC-A8C6-6CB1DB9FDB42" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "FB04C3E1-2134-48FB-A187-44107D90ED38", "b37900c7-8840-41a7-adc1-db1666502657" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
