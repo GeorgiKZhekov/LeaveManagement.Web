@@ -9,7 +9,7 @@ public class MapperConfig : Profile
     public MapperConfig()
     {
         CreateMap<LeaveType, LeaveTypeViewModel>().ReverseMap();
-        CreateMap<Employee, EmployeeViewModel>().ReverseMap();
+        CreateMap<Employee, EmployeeListViewModel>().ReverseMap();
     }
     
 }
