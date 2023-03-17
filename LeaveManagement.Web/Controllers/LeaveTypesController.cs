@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.Web.Data;
 using AutoMapper;
 using LeaveManagement.Web.Models;
 using LeaveManagement.Web.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using LeaveManagement.Web.Constants;
-using AutoMapper.Configuration.Conventions;
 
 namespace LeaveManagement.Web.Controllers
 {
-    [Authorize(Roles = Roles.Administrator)]
+    //[Authorize(Roles = Roles.Administrator)]
     public class LeaveTypesController : Controller
     {
         private readonly ILeaveTypeRepository _leaveTypeRepo;
+        private readonly ILeaveAllocationRepository _leaveAllocationRepo;
         private readonly IMapper _mapper;
 
-        public LeaveTypesController(IMapper mapper, ILeaveTypeRepository leaveTypeRepo)
+        public LeaveTypesController(IMapper mapper, ILeaveTypeRepository leaveTypeRepo, ILeaveAllocationRepository leaveAllocationRepo)
         {
-            this._mapper = mapper;
+            _mapper = mapper;
             _leaveTypeRepo = leaveTypeRepo;
+            _leaveAllocationRepo = leaveAllocationRepo;
         }
 
         // GET: LeaveTypes
@@ -134,7 +128,9 @@ namespace LeaveManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AllocateLeave(int id)
         {
-            throw new NotImplementedException();
+            await _leaveAllocationRepo.LeaveAllocation(id);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -37,6 +37,9 @@ public class LeaveAllocationRepository : GenericRepository<LeaveAllocation>, ILe
 
         foreach (var employee in employees)
         {
+            if (await AllocationExists(employee.Id, leaveTypeId, period))
+                continue;
+
             allocations.Add(new LeaveAllocation
             {
                 EmployeeId = employee.Id,
