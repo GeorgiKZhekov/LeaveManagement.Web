@@ -2,7 +2,7 @@
 
 namespace LeaveManagement.Web.Models;
 
-public class EmployeeListViewModel
+public class EmployeeViewModel
 {
     public string Id { get; set; }
     [Display(Name = "First name")]

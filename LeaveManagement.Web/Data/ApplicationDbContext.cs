@@ -16,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<Employee> //Identity user 
     {
 
         base.OnModelCreating(builder);
-        //using of configuration file so the db context does not get cluttered
+        //using of configuration files so the db context does not get cluttered
         builder.ApplyConfiguration(new RoleSeedConfiguration());
         builder.ApplyConfiguration(new UserSeedConfiguration());
         builder.ApplyConfiguration(new UserRoleSeedConfiguration());

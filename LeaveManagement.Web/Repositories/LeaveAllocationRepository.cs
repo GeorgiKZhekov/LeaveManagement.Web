@@ -38,13 +38,35 @@ public class LeaveAllocationRepository : GenericRepository<LeaveAllocation>, ILe
     {
         var allocations = await _dbContext.LeaveAllocations
             .Include(la => la.LeaveType)
-            .Where(la => la.EmployeeId == employeeId).ToListAsync();
+            .Where(la => la.EmployeeId == employeeId)
+            .ToListAsync();
+
         var employee = await _userManager.FindByIdAsync(employeeId);
 
         var employeeAllocations = _mapper.Map<EmployeeAllocationsViewModel>(employee);
         employeeAllocations.LeaveAllocations = _mapper.Map<List<LeaveAllocationViewModel>>(allocations);
         return employeeAllocations;
     
+    }
+
+    public async Task<LeaveAllocationEditViewModel> GetEmployeeAllocation(int id)
+    {
+        var allocation = await _dbContext.LeaveAllocations
+            .Include(la => la.LeaveType)
+            .FirstOrDefaultAsync(la => la.Id == id);
+
+        if(allocation == null)
+        {
+            return null;
+        }
+
+        var employee = await _userManager.FindByIdAsync(allocation.EmployeeId);
+
+        var model = _mapper.Map<LeaveAllocationEditViewModel>(allocation);
+        model.Employee = _mapper.Map<EmployeeViewModel>(await _userManager.FindByIdAsync(allocation.EmployeeId));
+
+        return model;
+
     }
 
     public async Task LeaveAllocation(int leaveTypeId)
@@ -71,5 +93,19 @@ public class LeaveAllocationRepository : GenericRepository<LeaveAllocation>, ILe
         await AddRangeAsync(allocations);
     }
 
+    public async Task<bool> EditEmployeeAllocation(LeaveAllocationEditViewModel model)
+    {
+        var leaveAllocation = await GetAsync(model.Id);
 
+        if (leaveAllocation == null)
+        {
+            return false;
+        }
+
+        leaveAllocation.Period = model.Period;
+        leaveAllocation.NumberOfDays = model.NumberOfDays;
+
+        await UpdateAsync(leaveAllocation);
+        return true;
+    }
 }
