@@ -26,8 +26,8 @@
             </div>
             <br />
             <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark"><i class="fa fa-pencil-alt"></i></a>
-                <input type="submit" value="EditAllocation" class="btn btn-primary" />
+                <a asp-action="ViewAllocations" asp-route-id="@Model.EmployeeId" class="btn btn-dark">Back</a>
+                <input type="submit" value="Save changes" class="btn btn-primary" />
             </div>
         </form>
     </div>

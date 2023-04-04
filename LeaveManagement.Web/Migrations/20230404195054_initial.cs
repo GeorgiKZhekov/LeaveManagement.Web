@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LeaveManagement.Web.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -196,7 +196,35 @@ namespace LeaveManagement.Web.Migrations
                         column: x => x.LeaveTypeId,
                         principalTable: "LeaveTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LeaveTypeId = table.Column<int>(type: "int", nullable: false),
+                    DateRequested = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RequestsComments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Approved = table.Column<bool>(type: "bit", nullable: true),
+                    Cancelled = table.Column<bool>(type: "bit", nullable: false),
+                    RequestingEmployeeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LeaveRequests_LeaveTypes_LeaveTypeId",
+                        column: x => x.LeaveTypeId,
+                        principalTable: "LeaveTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -204,8 +232,8 @@ namespace LeaveManagement.Web.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "FAE750D3-5866-42F9-A55F-E68349AF69F1", "464947a7-9ff4-4533-9739-17bf8812db38", "User", "USER" },
-                    { "FB04C3E1-2134-48FB-A187-44107D90ED38", "006f8e81-65ff-4592-b639-d58533f0bab0", "Administrator", "ADMINISTRATOR" }
+                    { "FAE750D3-5866-42F9-A55F-E68349AF69F1", "7f1e02a0-7e27-418e-a86e-e0e0e41b3e5f", "User", "USER" },
+                    { "FB04C3E1-2134-48FB-A187-44107D90ED38", "7e35f302-eb1d-40ed-81ff-02e2ed1a14d2", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -213,8 +241,8 @@ namespace LeaveManagement.Web.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateJoined", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TaxId", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "5E8EBDC0-7AD3-41CC-A8C6-6CB1DB9FDB42", 0, "e5d7f902-01e7-45a0-b43c-a507b4936a46", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "jototheg@gmail.com", true, "Ioana", "Palova", false, null, "JOTOTHEG@GMAIL.COM", "JOTOTHEG@GMAIL.COM", "AQAAAAEAACcQAAAAEKnEpi2GwxRDh15Cnxfx+7T5EoQV2P1pqS/uFOvAIpFORAna0Ay/6Ox+2xrzPkgMZw==", null, false, "c80d0d7b-8c9b-4574-8e98-836f08befbfc", null, false, "jototheg@gmail.com" },
-                    { "b37900c7-8840-41a7-adc1-db1666502657", 0, "da85bebd-26bf-4f82-9cb7-1546440fd753", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "gtothejo@gmail.com", true, "Georgi", "Zhekov", false, null, "GTOTHEJO@GMAIL.COM", "GTOTHEJO@GMAIL.COM", "AQAAAAEAACcQAAAAEMy5/TDOMdgF5SJzqrP8mIlex2S+OY5G1kaE08JX5cpYxgM4c4QX+4YRGv3p4wrF2Q==", null, false, "bd74df55-bfc3-41bc-9706-ca163c5242d6", null, false, "gtothejo@gmail.com" }
+                    { "5E8EBDC0-7AD3-41CC-A8C6-6CB1DB9FDB42", 0, "902c75f6-97ea-4f6d-af52-7895f578a0f1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "jototheg@gmail.com", true, "Ioana", "Palova", false, null, "JOTOTHEG@GMAIL.COM", "JOTOTHEG@GMAIL.COM", "AQAAAAEAACcQAAAAEIH455qqMkmPSi6LQ9gIGKd55+NWxWy97tbvh+YxI3HM9xddHPpZB/umIUiIC/o+ig==", null, false, "77e487ce-557a-4a12-85f7-57e1a543f753", null, false, "jototheg@gmail.com" },
+                    { "b37900c7-8840-41a7-adc1-db1666502657", 0, "a39c6b24-3c7b-41ae-830c-191642dfc801", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "gtothejo@gmail.com", true, "Georgi", "Zhekov", false, null, "GTOTHEJO@GMAIL.COM", "GTOTHEJO@GMAIL.COM", "AQAAAAEAACcQAAAAEExa0qOxLU7gTmky0h/Aure9hLZsLxQQFQjiQU63Dbxhk7/+pkJ/DO1ncuPxHOKRAA==", null, false, "982cd208-a66c-4bb8-9df3-9df608cab19a", null, false, "gtothejo@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -270,6 +298,11 @@ namespace LeaveManagement.Web.Migrations
                 name: "IX_LeaveAllocations_LeaveTypeId",
                 table: "LeaveAllocations",
                 column: "LeaveTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveRequests_LeaveTypeId",
+                table: "LeaveRequests",
+                column: "LeaveTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -291,6 +324,9 @@ namespace LeaveManagement.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "LeaveAllocations");
+
+            migrationBuilder.DropTable(
+                name: "LeaveRequests");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
