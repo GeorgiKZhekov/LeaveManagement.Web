@@ -47,7 +47,7 @@ namespace LeaveManagement.Web.Controllers
         // GET: LeaveRequests/Create
         public IActionResult Create()
         {
-            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Id");
+            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace LeaveManagement.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Id", leaveRequest.LeaveTypeId);
+            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveRequest.LeaveTypeId);
             return View(leaveRequest);
         }
 
