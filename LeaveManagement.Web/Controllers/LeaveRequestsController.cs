@@ -6,16 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.Web.Data;
+using LeaveManagement.Web.Models;
+using AutoMapper;
+using LeaveManagement.Web.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace LeaveManagement.Web.Controllers
 {
     public class LeaveRequestsController : Controller
     {
+        private readonly UserManager<Employee> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly ILeaveRequestRepository _leaveRequestRepo;
+        private readonly IMapper _mapper;
 
-        public LeaveRequestsController(ApplicationDbContext context)
+        public LeaveRequestsController(ApplicationDbContext context, IMapper mapper, ILeaveRequestRepository leaveRequestRepo, UserManager<Employee> userManager)
         {
             _context = context;
+            _mapper = mapper;
+            _leaveRequestRepo = leaveRequestRepo;
+            _userManager = userManager;
         }
 
         // GET: LeaveRequests
@@ -47,8 +57,12 @@ namespace LeaveManagement.Web.Controllers
         // GET: LeaveRequests/Create
         public IActionResult Create()
         {
-            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name");
-            return View();
+            var model = new LeaveRequestCreateViewModel
+            {
+                LeaveTypes = new SelectList(_context.LeaveTypes, "Id", "Name")
+            };
+
+            return View(model);
         }
 
         // POST: LeaveRequests/Create
@@ -56,16 +70,15 @@ namespace LeaveManagement.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StartDate,EndDate,LeaveTypeId,DateRequested,RequestsComments,Approved,Cancelled,RequestingEmployeeId,Id,DateCreated,DateModified")] LeaveRequest leaveRequest)
+        public async Task<IActionResult> Create(LeaveRequestCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(leaveRequest);
-                await _context.SaveChangesAsync();
+                await _leaveRequestRepo.CreateLeaveReequest(model);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeaveTypeId"] = new SelectList(_context.LeaveTypes, "Id", "Name", leaveRequest.LeaveTypeId);
-            return View(leaveRequest);
+            model.LeaveTypes = new SelectList(_context.LeaveTypes, "Id", "Name", model.LeaveTypeId);
+            return View(model);
         }
 
         // GET: LeaveRequests/Edit/5

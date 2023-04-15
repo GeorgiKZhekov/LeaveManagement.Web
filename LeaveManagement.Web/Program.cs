@@ -19,6 +19,9 @@ builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireC
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//gives me the http context in other classes then controllersS
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddTransient<IEmailSender>(options =>
     new EmailSender("localhost", 25, "no-reply@leavemanagament.com")
 );

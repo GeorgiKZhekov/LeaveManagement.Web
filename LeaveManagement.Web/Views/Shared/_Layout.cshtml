@@ -8,6 +8,7 @@
     <script src="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css"></script>
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LeaveManagement.Web.styles.css" asp-append-version="true" />
 </head>
@@ -25,9 +26,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <!-- TODO: remove the commenting of the section below --!>
-                        @*@if (User.IsInRole(Roles.Administrator))
-                        {*@
+                        @if (User.IsInRole(Roles.Administrator))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
                             </li>
@@ -48,7 +48,7 @@
                                     <li><a class="dropdown-item" href="#">Employee Management</a></li>
                                 </ul>
                             </li>
-                        @*}*@
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -71,9 +71,13 @@
     <script src="~/lib/sweetalert/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script> 
         $(function() {
             $('.table').DataTable();
+            $('.datepicker').datepicker({
+                dateFormat: "yy-mm-dd"
+            });
         });
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
