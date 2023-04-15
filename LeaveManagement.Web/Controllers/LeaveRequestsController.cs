@@ -15,7 +15,6 @@ namespace LeaveManagement.Web.Controllers
 {
     public class LeaveRequestsController : Controller
     {
-        private readonly UserManager<Employee> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILeaveRequestRepository _leaveRequestRepo;
         private readonly IMapper _mapper;
@@ -25,7 +24,6 @@ namespace LeaveManagement.Web.Controllers
             _context = context;
             _mapper = mapper;
             _leaveRequestRepo = leaveRequestRepo;
-            _userManager = userManager;
         }
 
         // GET: LeaveRequests
@@ -35,6 +33,11 @@ namespace LeaveManagement.Web.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> MyLeave()
+        {
+            var model = await _leaveRequestRepo.GetMyLeaveDetails();
+            return View(model);
+        }
         // GET: LeaveRequests/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -65,18 +68,23 @@ namespace LeaveManagement.Web.Controllers
             return View(model);
         }
 
-        // POST: LeaveRequests/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LeaveRequestCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _leaveRequestRepo.CreateLeaveReequest(model);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _leaveRequestRepo.CreateLeaveReequest(model);
+                    return RedirectToAction(nameof(MyLeave));
+                }
             }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "An error has occuerred. Please try againg later.");
+            }
+
             model.LeaveTypes = new SelectList(_context.LeaveTypes, "Id", "Name", model.LeaveTypeId);
             return View(model);
         }
@@ -167,14 +175,14 @@ namespace LeaveManagement.Web.Controllers
             {
                 _context.LeaveRequests.Remove(leaveRequest);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LeaveRequestExists(int id)
         {
-          return (_context.LeaveRequests?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.LeaveRequests?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

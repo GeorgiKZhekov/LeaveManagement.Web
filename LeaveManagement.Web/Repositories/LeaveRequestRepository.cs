@@ -4,6 +4,7 @@ using LeaveManagement.Web.Data;
 using LeaveManagement.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LeaveManagement.Web.Repositories;
 
@@ -13,19 +14,22 @@ public class LeaveRequestRepository : GenericRepository<LeaveRequest>, ILeaveReq
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContext;
     private readonly UserManager<Employee> _userManager;
+    private readonly ILeaveAllocationRepository _leaveAllocationRepo;
 
     public LeaveRequestRepository(ApplicationDbContext dbContext
         , IMapper mapper
         , IHttpContextAccessor httpContext
-        , UserManager<Employee> userManager) : base(dbContext)
+        , UserManager<Employee> userManager,
+ILeaveAllocationRepository leaveAllocationRepo) : base(dbContext)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _httpContext = httpContext;
         _userManager = userManager;
+        _leaveAllocationRepo = leaveAllocationRepo;
     }
 
-    public async Task<bool> CreateLeaveReequest(LeaveRequestCreateViewModel request)
+    public async Task CreateLeaveReequest(LeaveRequestCreateViewModel request)
     {
         var user = await _userManager.GetUserAsync(_httpContext?.HttpContext?.User);
 
@@ -34,6 +38,23 @@ public class LeaveRequestRepository : GenericRepository<LeaveRequest>, ILeaveReq
         leaveRequest.RequestingEmployeeId = user.Id;
 
         await AddAsync(leaveRequest);
-        return true;
+    }
+
+    public async Task<EmployeeLeaveRequestViewModel> GetMyLeaveDetails()
+    {
+        var user = await _userManager.GetUserAsync(_httpContext?.HttpContext?.User);
+        var leaveRequests = _mapper.Map<List<LeaveRequestViewModel>>(await _dbContext.LeaveRequests
+            .Include(lr => lr.LeaveType)
+            .Where(lr => lr.RequestingEmployeeId == user.Id)
+            .ToListAsync());
+        var leaveAllocations = (await _leaveAllocationRepo.GetEmployeeAllocations(user.Id)).LeaveAllocations;
+
+        var model = new EmployeeLeaveRequestViewModel
+        {
+            LeaveRequests = leaveRequests,
+            LeaveAllocations = leaveAllocations
+        };
+
+        return model;
     }
 }

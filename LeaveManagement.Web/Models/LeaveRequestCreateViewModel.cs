@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LeaveManagement.Web.Models;
 
-public class LeaveRequestCreateViewModel
+public class LeaveRequestCreateViewModel : IValidatableObject
 {
     [Required]
     [Display(Name = "Start date")]
@@ -17,9 +17,16 @@ public class LeaveRequestCreateViewModel
     [Display(Name = "Leave type")]
     public int LeaveTypeId { get; set; }
 
-    public SelectList LeaveTypes { get; set; }
+    public SelectList? LeaveTypes { get; set; }
 
     [Display(Name = "Request comment")]
-    public string RequestsComments { get; set; }
+    public string? RequestsComments { get; set; }
 
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if(StartDate > EndDate)
+        {
+            yield return new ValidationResult("The Start date must be before the End date!", new[] {nameof(StartDate), nameof(EndDate)});
+        }
+    }
 }
