@@ -11,6 +11,7 @@ public interface ILeaveAllocationRepository : IGenericRepository<LeaveAllocation
 
     Task<EmployeeAllocationsViewModel> GetEmployeeAllocations(string employeeId);
 
+    Task<LeaveAllocation> GetEmployeeAllocation(string employeeId, int leaveTypeId);
     Task<LeaveAllocationEditViewModel> GetEmployeeAllocation(int id);
 
     Task<bool> EditEmployeeAllocation(LeaveAllocationEditViewModel model);
